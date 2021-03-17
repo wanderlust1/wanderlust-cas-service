@@ -44,6 +44,7 @@ open class BaseDao {
             }
             commit()
         } catch (e: Exception) {
+            e.printStackTrace()
         } finally {
             try {
                 mSession?.close()
@@ -66,6 +67,7 @@ open class BaseDao {
             commit()
             result ?: -1
         } catch (e: Exception) {
+            e.printStackTrace()
             if (e is IbatisException) -2 else -1
         } finally {
             try {
@@ -88,6 +90,7 @@ open class BaseDao {
             commit()
             result ?: -1
         } catch (e: Exception) {
+            e.printStackTrace()
             -1
         } finally {
             try {
@@ -110,6 +113,7 @@ open class BaseDao {
             commit()
             result ?: -1
         } catch (e: Exception) {
+            e.printStackTrace()
             -1
         } finally {
             try {

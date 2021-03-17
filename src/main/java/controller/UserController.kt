@@ -1,9 +1,12 @@
 package controller
 
 import com.google.gson.Gson
+import event.CommunityEvent
 import event.UserEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.multipart.MultipartFile
 import service.UserService
@@ -27,7 +30,6 @@ class UserController {
         rsp.contentType = "text/html;charset=UTF-8"
         val result = mUserService.getUserData(req.getParameter("id"), req.getParameter("pw"))
         rsp.writer.write(Gson().toJson(result))
-
     }
-
+    
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.CommunityDaoImpl">
+
+	<select id="queryCommunityByKeywords" resultType="entity.Community">
+		select
+			community.community_id as id, community_name as name, menber_count as count, location,
+			cast (case when join_community.user_id is null then 0 else 1 end as int) as hasJoined
+		from
+			community left join join_community on community.community_id = join_community.community_id and join_community.user_id = #{user_id}
+		where
+			community_name like '%' + #{keywords} + '%'
+	</select>
+
+	<insert id="insertJoinCommunity" parameterType="Map">
+		insert into join_community(user_id, community_id)
+		values(#{user_id}, #{community_id})
+	</insert>
+
+	<delete id="deleteJoinCommunity" parameterType="Map">
+		delete from join_community
+		where user_id = #{user_id} and community_id = #{community_id}
+	</delete>
+
+</mapper>

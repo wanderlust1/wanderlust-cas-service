@@ -37,6 +37,7 @@ class LoginController {
         } else {
             UserEvent.LoginRsp(queryRsp.code, msg)
         }
+        println(result)
         response.writer.write(Gson().toJson(result))
     }
 
