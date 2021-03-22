@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="dao.UserDaoImpl">
 
 	<select id="queryUser" resultType="entity.User" parameterType="entity.User">
-		select users.user_id as userId, user_name as userName, password, cid, tmp.community_id as communityId, tmp.community_name as communityName
+		select users.user_id as userId, user_name as userName, password, cid, phone, tmp.community_id as communityId, tmp.community_name as communityName
 		from users left join (
 			select user_id, community.community_id, community.community_name
 			from community, join_community
@@ -16,8 +16,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="insertUser" parameterType="entity.User">
-		insert into users(user_id, password, user_name, cid)
-		values(#{userId}, #{password}, #{userName}, #{cid})
+		insert into users(user_id, password, user_name, cid, phone)
+		values(#{userId}, #{password}, #{userName}, #{cid}, #{phone})
 	</insert>
 
 	<select id="queryAdmin" resultType="entity.Admin" parameterType="entity.Admin">

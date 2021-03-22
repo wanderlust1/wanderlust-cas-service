@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.RegDaoImpl">
+
+	<select id="queryTemperRecord" resultType="entity.TemperReg" parameterType="String">
+		select user_id as userId, temperature as temper, status, approach, date
+		from temper_reg
+		where user_id = #{0}
+	</select>
+
+	<select id="queryOutsideRecord" resultType="entity.OutSideReg" parameterType="String">
+		select user_id as userId, city, start_time as startTime, end_time as endTime, reason, phone, create_date as date
+		from outside_reg
+		where user_id = #{0}
+	</select>
+
+	<insert id="insertTemper" parameterType="entity.TemperReg">
+		insert into temper_reg(user_id, temperature, status, approach, date)
+		values(#{userId}, #{temper}, #{status}, #{approach}, #{date})
+	</insert>
+
+	<insert id="insertOutside" parameterType="entity.OutSideReg">
+		insert into outside_reg(user_id, city, start_time, end_time, reason, phone, create_date)
+		values(#{userId}, #{city}, #{startTime}, #{endTime}, #{reason}, #{phone}, #{date})
+	</insert>
+
+</mapper>

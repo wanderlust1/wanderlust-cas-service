@@ -4,7 +4,7 @@ import dao.CommunityDao
 import entity.Community
 import event.CommunityEvent
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Service 
 
 @Service
 class CommunityServiceImpl: CommunityService {
