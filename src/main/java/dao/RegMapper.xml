@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="dao.RegDaoImpl">
 
 	<select id="queryTemperRecord" resultType="entity.TemperReg" parameterType="String">
-		select user_id as userId, temperature as temper, status, approach, date
+		select user_id as userId, temperature as temper, status, approach, date, diagnose
 		from temper_reg
 		where user_id = #{0}
 	</select>
@@ -18,8 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="insertTemper" parameterType="entity.TemperReg">
-		insert into temper_reg(user_id, temperature, status, approach, date)
-		values(#{userId}, #{temper}, #{status}, #{approach}, #{date})
+		insert into temper_reg(user_id, temperature, status, approach, date, diagnose)
+		values(#{userId}, #{temper}, #{status}, #{approach}, #{date}, #{diagnose})
 	</insert>
 
 	<insert id="insertOutside" parameterType="entity.OutSideReg">

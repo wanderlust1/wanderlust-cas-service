@@ -12,6 +12,11 @@ class UserDaoImpl: UserDao, BaseDao() {
         return if (result.isNotEmpty()) result[0] else null
     }
 
+    override fun queryUserById(userId: String): User? {
+        val result = query<User>("dao.UserDaoImpl.queryUserById", userId)
+        return if (result.isNotEmpty()) result[0] else null
+    }
+
     override fun insertUser(user: User): Int {
         return insert("dao.UserDaoImpl.insertUser", user)
     }
