@@ -18,7 +18,7 @@ class QRCodeController {
     @Autowired
     lateinit var mQRCodeService: QRCodeService
 
-    @PostMapping("/getQRContent")
+    @PostMapping("/requestQRContent")
     fun getQRContent(@RequestBody request: QRCodeEvent.QRContentReq, response: HttpServletResponse) {
         response.contentType = "text/html;charset=UTF-8"
         println(request)

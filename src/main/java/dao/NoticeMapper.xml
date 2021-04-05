@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.NoticeDaoImpl">
+
+	<insert id="insertNotice" parameterType="entity.Notice">
+		insert into notice(notice_id, content, community_id, notice_type, date, title)
+		values(#{id}, #{content}, #{communityId}, #{type}, #{date}, #{title})
+	</insert>
+
+	<select id="queryNoticesUser" resultType="entity.Notice" parameterType="Map">
+		select
+			notice.notice_id as id, content, community_id as communityId, notice_type as type, date, title,
+			cast (case when notice_read.user_id is null then 0 else 1 end as int) as hasRead
+		from
+			notice left join notice_read on notice.notice_id = notice_read.notice_id and notice_read.user_id = #{user_id}
+		where
+			community_id = #{community_id}
+	</select>
+
+	<select id="queryNoticesAdmin" resultType="entity.Notice" parameterType="Map">
+		select
+			notice.notice_id as id, content, community_id as communityId, notice_type as type, date, title,
+			COUNT(user_id) as readCount
+		from
+			notice left join notice_read on notice.notice_id = notice_read.notice_id
+		where
+			community_id = #{community_id}
+		group by
+			notice.notice_id, content, community_id, notice_type, date, title
+	</select>
+
+	<select id="queryNoReadCount" resultType="int" parameterType="Map">
+		select COUNT(tmp.id)
+		from (
+			select notice.notice_id as id
+			from notice left join notice_read on notice.notice_id = notice_read.notice_id and notice_read.user_id = #{user_id}
+			where community_id = #{community_id} and user_id is null) as tmp
+	</select>
+
+	<insert id="insertNoticeRead" parameterType="Map">
+		insert into notice_read(user_id, notice_id) values(#{user_id}, #{notice_id})
+	</insert>
+
+</mapper>

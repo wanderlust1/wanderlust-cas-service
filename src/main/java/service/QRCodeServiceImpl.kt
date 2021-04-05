@@ -12,6 +12,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.ThreadPoolExecutor
 
 @Service
 class QRCodeServiceImpl : QRCodeService {
@@ -24,8 +25,8 @@ class QRCodeServiceImpl : QRCodeService {
 
     override fun getQRContent(userId: String): QRContent {
         val result = QRContent()
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
         val temperReg = mRegDao.queryTemperRecord(userId).sortedWith { temperReg1: TemperReg, temperReg2: TemperReg ->
-            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
             val date1 = format.parse(temperReg1.date)
             val date2 = format.parse(temperReg2.date)
             if (date1.after(date2)) -1 else 1
@@ -37,10 +38,9 @@ class QRCodeServiceImpl : QRCodeService {
         result.diagnose    = temperReg.diagnose
         result.outside     = mutableListOf()
         mRegDao.queryOutsideRecord(userId).filter {
-            val format = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA)
-            val start = format.parse(it.startTime)
-            val end   = format.parse(it.endTime)
-            val curr  = Calendar.getInstance(Locale.CHINA).time
+            val start    = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(it.startTime)
+            val end      = SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).parse(it.endTime)
+            val curr     = Calendar.getInstance(Locale.CHINA).time
             val monthAgo = Calendar.getInstance(Locale.CHINA).apply {
                 add(Calendar.MONTH, -1)
             }.time
@@ -52,11 +52,12 @@ class QRCodeServiceImpl : QRCodeService {
         }
         result.content = Content().apply {
             val user = mUserDao.queryUserById(userId) ?: return@apply
-            name = user.userName.replaceRange(1 until user.userName.length, "**")
-            phone = user.phone.replaceRange(3..7, "****")
-            cid = user.cid.replaceRange(2..15, "**************")
-            label = "Wanderlust 社区疫情防控系统"
-            encode = "$label$cid$name$phone${System.currentTimeMillis()}".computeMD5()
+            name   = user.userName.replaceRange(1 until user.userName.length, "**")
+            phone  = user.phone.replaceRange(3..7, "****")
+            cid    = user.cid.replaceRange(2..15, "**************")
+            label  = "Wanderlust 社区疫情防控系统"
+            time   = format.format(Calendar.getInstance().time)
+            encode = "$label$cid$name$phone$time".computeMD5()
         }
         return result
     }

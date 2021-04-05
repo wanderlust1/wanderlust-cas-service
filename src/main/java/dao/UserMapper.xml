@@ -27,8 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<select id="queryAdmin" resultType="entity.Admin" parameterType="entity.Admin">
-		select admin_id as adminId, community_name as communityName, password
-		from admins
+		select admin_id as adminId, admins.community_id as communityId, password, community_name as communityName
+		from admins left join community on admins.community_id = community.community_id
 		where admin_id = #{adminId} and password = #{password}
 	</select>
 

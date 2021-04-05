@@ -5,12 +5,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="dao.CommunityDaoImpl">
 
-	<select id="queryCommunityByKeywords" resultType="entity.Community">
+	<select id="queryCommunityByKeywords" parameterType="Map" resultType="entity.Community">
 		select
-			community.community_id as id, community_name as name, menber_count as count, location,
+			community.community_id as id, community_name as name, menber_count as count, location, phone,
 			cast (case when join_community.user_id is null then 0 else 1 end as int) as hasJoined
 		from
 			community left join join_community on community.community_id = join_community.community_id and join_community.user_id = #{user_id}
+		where
+			community_name like '%' + #{keywords} + '%'
+	</select>
+
+	<select id="queryAdminCommunityByKeywords" parameterType="Map" resultType="entity.Community">
+		select
+			community.community_id as id, community_name as name, menber_count as count, location, phone,
+			cast (case when admins.admin_id is null then 0 else 1 end as int) as hasJoined
+		from
+			community left join admins on community.community_id = admins.community_id and admin_id = #{admin_id}
 		where
 			community_name like '%' + #{keywords} + '%'
 	</select>
@@ -24,5 +34,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from join_community
 		where user_id = #{user_id} and community_id = #{community_id}
 	</delete>
+
+	<insert id="insertCommunity" parameterType="entity.Community">
+		insert into community(community_id, community_name, location, menber_count, phone)
+		values(#{id}, #{name}, #{location}, #{count}, #{phone})
+	</insert>
+
+	<insert id="updateAdminCommunity" parameterType="Map">
+		update admins
+		set community_id = #{community_id}
+		where admin_id = #{admin_id}
+	</insert>
 
 </mapper>

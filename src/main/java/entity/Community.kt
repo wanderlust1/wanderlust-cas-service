@@ -12,6 +12,8 @@ data class Community (
 
     var location: String = "",
 
+    var phone: String = "",
+
     var hasJoined: Int = 0
 
 )
