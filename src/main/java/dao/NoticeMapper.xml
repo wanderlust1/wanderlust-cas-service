@@ -44,4 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into notice_read(user_id, notice_id) values(#{user_id}, #{notice_id})
 	</insert>
 
+	<insert id="deleteNotice" parameterType="Map">
+		delete from notice where notice_id = #{notice_id}
+	</insert>
+
 </mapper>

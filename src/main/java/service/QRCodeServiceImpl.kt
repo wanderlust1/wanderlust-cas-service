@@ -8,6 +8,7 @@ import entity.TemperReg
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import utils.HealthType
+import java.lang.StringBuilder
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
@@ -52,7 +53,17 @@ class QRCodeServiceImpl : QRCodeService {
         }
         result.content = Content().apply {
             val user = mUserDao.queryUserById(userId) ?: return@apply
-            name   = user.userName.replaceRange(1 until user.userName.length, "**")
+            name = if (user.userName.length <= 1) {
+                user.userName
+            } else if (user.userName.length == 2) {
+                "${user.userName[0]}*"
+            } else StringBuilder(user.userName).apply {
+                for (i in user.userName.indices) {
+                    if (i < user.userName.length - 1 && i > 0) {
+                        replace(i, i + 1, "*")
+                    }
+                }
+            }.toString()
             phone  = user.phone.replaceRange(3..7, "****")
             cid    = user.cid.replaceRange(2..15, "**************")
             label  = "Wanderlust 社区疫情防控系统"

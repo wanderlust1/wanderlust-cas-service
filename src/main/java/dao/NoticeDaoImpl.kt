@@ -30,4 +30,9 @@ class NoticeDaoImpl: BaseDao(), NoticeDao {
         return insert("dao.NoticeDaoImpl.insertNoticeRead", params)
     }
 
+    override fun deleteNotice(noticeId: String): Int {
+        val params = mapOf("notice_id" to noticeId)
+        return insert("dao.NoticeDaoImpl.deleteNotice", params)
+    }
+
 }

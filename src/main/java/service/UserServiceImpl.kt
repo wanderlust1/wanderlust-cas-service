@@ -13,10 +13,6 @@ class UserServiceImpl: UserService {
     @Autowired
     lateinit var mUserDao: UserDao
 
-    override fun getUserData(id: String, password: String): User? {
-        return mUserDao.queryUser(User(userId = id, password = password))
-    }
-
     override fun login(req: UserEvent.LoginReq): UserEvent.LoginQueryRsp {
         if (req.loginType == LoginType.USER && req.user != null) {
             val queryUser = mUserDao.queryUser(req.user)
@@ -43,6 +39,14 @@ class UserServiceImpl: UserService {
             -2   -> UserEvent.EXISTED
             else -> UserEvent.FAIL
         }
+    }
+
+    override fun getCommunityUsers(communityId: String): List<User> {
+        return mUserDao.queryCommunityUsers(communityId)
+    }
+
+    override fun removeUserFromCommunity(userId: String, communityId: String): Int {
+        return if (mUserDao.deleteUserFromCommunity(userId, communityId) == 1) UserEvent.SUCC else UserEvent.FAIL
     }
 
 }

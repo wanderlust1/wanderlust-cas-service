@@ -42,4 +42,8 @@ class NoticeServiceImpl: NoticeService {
         return if (mNoticeDao.insertNoticeRead(userId, noticeId) == 1) NoticeEvent.SUCC else NoticeEvent.FAIL
     }
 
+    override fun deleteNotice(noticeId: String): Int {
+        return if (mNoticeDao.deleteNotice(noticeId) == 1) NoticeEvent.SUCC else NoticeEvent.FAIL
+    }
+
 }

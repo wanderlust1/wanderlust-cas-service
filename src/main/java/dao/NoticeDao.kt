@@ -14,4 +14,6 @@ interface NoticeDao {
 
     fun insertNoticeRead(userId: String, noticeId: String): Int
 
+    fun deleteNotice(noticeId: String): Int
+
 }

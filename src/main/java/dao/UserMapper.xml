@@ -37,4 +37,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{adminId}, #{password})
 	</insert>
 
+	<select id="queryCommunityUsers" resultType="entity.User" parameterType="String">
+		select users.user_id as userId, user_name as userName, users.cid, users.phone
+		from users, community, join_community
+		where users.user_id = join_community.user_id
+			  and community.community_id = join_community.community_id
+		      and community.community_id = #{0}
+	</select>
+
+	<delete id="deleteUserFromCommunity" parameterType="Map">
+		delete from join_community where user_id = #{user_id} and community_id = #{community_id}
+	</delete>
+
 </mapper>

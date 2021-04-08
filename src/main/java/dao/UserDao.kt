@@ -15,4 +15,8 @@ interface UserDao {
 
     fun insertAdmin(admin: Admin): Int
 
+    fun queryCommunityUsers(communityId: String): List<User>
+
+    fun deleteUserFromCommunity(userId: String, communityId: String): Int
+
 }

@@ -67,5 +67,15 @@ class NoticeController {
         response.writer.write(Gson().toJson(result))
     }
 
+    @PostMapping("/deleteNotice")
+    fun deleteNotice(@RequestBody request: NoticeEvent.DeleteNoticeReq, response: HttpServletResponse) {
+        response.contentType = "text/html;charset=UTF-8"
+        println(request)
+        val resultCode = mNoticeService.deleteNotice(request.noticeId)
+        val message = if (resultCode == NoticeEvent.SUCC) "已删除此公告" else "操作失败"
+        val result = NoticeEvent.DeleteNoticeRsp(resultCode, message)
+        println(result)
+        response.writer.write(Gson().toJson(result))
+    }
 
 }

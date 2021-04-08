@@ -30,4 +30,13 @@ class UserDaoImpl: UserDao, BaseDao() {
         return insert("dao.UserDaoImpl.insertAdmin", admin)
     }
 
+    override fun queryCommunityUsers(communityId: String): List<User> {
+        return query("dao.UserDaoImpl.queryCommunityUsers", communityId)
+    }
+
+    override fun deleteUserFromCommunity(userId: String, communityId: String): Int {
+        val params = mapOf("user_id" to userId, "community_id" to communityId)
+        return delete("dao.UserDaoImpl.deleteUserFromCommunity", params)
+    }
+
 }
