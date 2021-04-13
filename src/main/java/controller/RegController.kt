@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import service.RegService
+import utils.CheckUtils.checkPhone
 import javax.servlet.http.HttpServletResponse
 
 @Controller
@@ -53,7 +54,9 @@ class RegController {
     fun addOutsideReg(@RequestBody request: RegEvent.AddOutsideRecordReq, response: HttpServletResponse) {
         response.contentType = "text/html;charset=UTF-8"
         println(request)
-        val result = when (mRegService.addOutsideReg(request.record)) {
+        val result = if (!request.record.phone.checkPhone()) {
+            RegEvent.AddOutsideRecordRsp(RegEvent.FAIL, "提交失败，紧急联系方式格式错误")
+        } else when (mRegService.addOutsideReg(request.record)) {
             RegEvent.SUCC ->
                 RegEvent.AddOutsideRecordRsp(RegEvent.SUCC, "外出记录已提交")
             RegEvent.FAIL ->

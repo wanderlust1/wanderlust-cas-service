@@ -1,18 +1,17 @@
 package controller
 
 import com.google.gson.Gson
-import entity.User
 import event.UserEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
 import service.UserService
+import utils.CheckUtils.checkCID
+import utils.CheckUtils.checkPhone
+import utils.CheckUtils.checkUsername
 import utils.LoginType
-import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.HttpSession
 
 @Controller
 class LoginController {
@@ -45,7 +44,13 @@ class LoginController {
     fun register(@RequestBody request: UserEvent.RegisterReq, response: HttpServletResponse) {
         response.contentType = "text/html;charset=UTF-8"
         println(request)
-        val result = when (mUserService.register(request)) {
+        val result = if (request.loginType == LoginType.USER && !request.user!!.phone.checkPhone()) {
+            UserEvent.RegisterRsp(UserEvent.FAIL, "注册失败，手机号码格式错误")
+        } else if (request.loginType == LoginType.USER && !request.user!!.cid.checkCID()) {
+            UserEvent.RegisterRsp(UserEvent.FAIL, "注册失败，身份证号格式错误")
+        } else if (request.loginType == LoginType.USER && !request.user!!.userName.checkUsername()) {
+            UserEvent.RegisterRsp(UserEvent.FAIL, "注册失败，姓名格式错误")
+        } else when (mUserService.register(request)) {
             UserEvent.SUCC ->
                 UserEvent.RegisterRsp(UserEvent.SUCC, "注册成功")
             UserEvent.EXISTED ->

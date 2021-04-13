@@ -27,4 +27,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{userId}, #{city}, #{startTime}, #{endTime}, #{reason}, #{phone}, #{date})
 	</insert>
 
+	<select id="queryCommunityTemperRegs" resultType="entity.TemperReg" parameterType="String">
+		select
+			temper_reg.user_id as userId, temper_reg.temperature as temper, temper_reg.status,
+			temper_reg.approach, temper_reg.date, temper_reg.diagnose
+		from temper_reg, (
+			select users.user_id
+			from users, join_community
+			where join_community.user_id = users.user_id and community_id = #{0}) as com_user
+		where
+			temper_reg.user_id = com_user.user_id
+	</select>
+
+	<select id="queryCommunityOutsideRegs" resultType="entity.OutSideReg" parameterType="String">
+		select
+			outside_reg.user_id as userId, outside_reg.city, outside_reg.start_time as startTime,
+			outside_reg.end_time as endTime, outside_reg.reason, outside_reg.phone, outside_reg.create_date as date
+		from outside_reg, (
+			select users.user_id
+			from users, join_community
+			where join_community.user_id = users.user_id and community_id = #{0}) as com_user
+		where
+			outside_reg.user_id = com_user.user_id
+	</select>
+
 </mapper>

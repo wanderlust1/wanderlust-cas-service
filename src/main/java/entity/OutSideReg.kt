@@ -1,5 +1,7 @@
 package entity
 
+import java.util.*
+
 data class OutSideReg (
 
     var userId: String = "",
@@ -14,6 +16,7 @@ data class OutSideReg (
 
     var reason: String = "",
 
-    var phone: String = ""
+    var phone: String = "",
 
+    var dateFormat: Date? = null
 )

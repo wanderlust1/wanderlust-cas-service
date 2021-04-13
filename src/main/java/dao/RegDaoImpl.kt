@@ -23,4 +23,12 @@ class RegDaoImpl: BaseDao(), RegDao {
         return insert("dao.RegDaoImpl.insertOutside", record)
     }
 
+    override fun queryCommunityTemperRegs(communityId: String): List<TemperReg> {
+        return query("dao.RegDaoImpl.queryCommunityTemperRegs", communityId)
+    }
+
+    override fun queryCommunityOutsideRegs(communityId: String): List<OutSideReg> {
+        return query("dao.RegDaoImpl.queryCommunityOutsideRegs", communityId)
+    }
+
 }

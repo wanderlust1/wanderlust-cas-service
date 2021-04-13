@@ -1,6 +1,7 @@
 package event
 
 import entity.Community
+import entity.CommunityStatistics
 
 interface CommunityEvent {
 
@@ -23,8 +24,16 @@ interface CommunityEvent {
 
     data class CreateCommunityRsp(val communityId: String, val code: Int, val msg: String)
 
+    data class GetCommunityReq(val communityId: String)
+
+    data class GetCommunityRsp(val community: Community, val code: Int)
+
     data class AdminBindCommunityReq(val adminId: String, val newCommunityId: String)
 
     data class AdminBindCommunityRsp(val code: Int, val msg: String)
+
+    data class CommunityMessageReq(val adminId: String)
+
+    data class CommunityMessageRsp(val community: Community, val statistics: CommunityStatistics, val code: Int)
 
 }

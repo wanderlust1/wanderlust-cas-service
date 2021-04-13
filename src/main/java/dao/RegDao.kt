@@ -13,4 +13,8 @@ interface RegDao {
 
     fun insertOutside(record: OutSideReg): Int
 
+    fun queryCommunityTemperRegs(communityId: String): List<TemperReg>
+
+    fun queryCommunityOutsideRegs(communityId: String): List<OutSideReg>
+
 }
